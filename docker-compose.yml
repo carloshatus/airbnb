@@ -11,6 +11,11 @@ services:
       MAINTAINER: ${MAINTAINER}
       PORT: ${API_PORT}
       NODE_ENV: ${API_ENV}
+      DB_CONNECTION: ${DATABASE_DRIVER_NAME}
+      DB_PORT: ${DATABASE_PORT}
+      DB_USER: ${DATABASE_USER}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      DB_DATABASE: ${DATABASE_NAME}
     ports:
       - 8000:${API_PORT}
     volumes:
@@ -20,7 +25,7 @@ services:
       - modo_bridge
 
   database:
-    container_name: ${DATABASE_NAME}
+    container_name: ${DATABASE_CONNECTION_NAME}
     restart: always
     build:
       context: ./${DATABASE_DIR}
@@ -28,6 +33,9 @@ services:
     environment:
       MAINTAINER: ${MAINTAINER}
       PORT: ${DATABASE_PORT}
+      DB_USER: ${DATABASE_USER}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      DB_DATABASE: ${DATABASE_NAME}
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
