@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  api:
+    image: ${API_NAME}
+    restart: always
+    build:
+      context: ./${API_DIR}
+      dockerfile: Dockerfile
+    environment:
+      MAINTAINER: ${MAINTAINER}
+      PORT: ${API_PORT}
+      NODE_ENV: ${API_ENV}
+    ports:
+      - 8000:${API_PORT}
+    volumes:
+      - ./${API_DIR}:/home/node/app
+      - ./${API_DIR}/node_modules:/home/node/app/node_modules
+    networks:
+      - modo_bridge
+
+  database:
+    container_name: ${DATABASE_NAME}
+    restart: always
+    build:
+      context: ./${DATABASE_DIR}
+      dockerfile: Dockerfile
+    environment:
+      MAINTAINER: ${MAINTAINER}
+      PORT: ${DATABASE_PORT}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - ./${DATABASE_DIR}/.data/:${DATABASE_DATA_DIR}
+    networks:
+      - modo_bridge
+
+networks:
+  modo_bridge:
+    driver: bridge
