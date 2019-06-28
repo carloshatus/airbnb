@@ -52,6 +52,7 @@ module.exports = {
     // ]
     apis: [
       'app/**/*.js',
+      'docs/**/*.yml',
       'start/routes.js'
     ]
   }
