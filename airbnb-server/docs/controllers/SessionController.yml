@@ -1,5 +1,7 @@
 /sessions:
   post:
+    tags: 
+      - Auth
     description: Login to the application
     produces:
       - application/json

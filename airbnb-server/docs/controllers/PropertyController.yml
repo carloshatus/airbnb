@@ -1,0 +1,74 @@
+/properties:
+  get:
+    tags: 
+      - Properties
+    summary: index
+    description: Show a list of all properties.
+    produces:
+      - application/json
+    parameters:
+      - name: latitude
+        description: Latitude.
+        in: body
+        required: true
+        type: number
+      - name: longitude
+        description: Longitude.
+        in: body
+        required: true
+        type: number
+    responses:
+      
+  post:
+    tags: 
+      - Properties
+    summary: store
+    description: Create/save a new property.
+    produces:
+      - application/json
+    parameters:
+    responses:
+
+/properties/{id}:
+  get:
+    tags: 
+      - Properties
+    summary: show
+    description: Display a single property.
+    produces:
+      - application/json
+    parameters:
+      - name: id
+        description: Property id.
+        in: path
+        required: true
+        type: int
+    responses:
+  put:
+    tags: 
+      - Properties
+    summary: update
+    description: Update property details.
+    produces:
+      - application/json
+    parameters:
+      - name: id
+        description: Property id.
+        in: path
+        required: true
+        type: int
+    responses:
+  delete:
+    tags: 
+      - Properties
+    summary: delete
+    description: Delete a property with id.
+    produces:
+      - application/json
+    parameters:
+      - name: id
+        description: Property id.
+        in: path
+        required: true
+        type: int
+    responses:

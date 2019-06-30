@@ -1,3 +1,3 @@
 # PostgreSQL
 
-"Docker directory" para configurar o container PostgreSQL.
+"Docker directory" para configurar o container do PostgreSQL.
