@@ -16,13 +16,12 @@ class PropertyController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request }) {
     const { latitude, longitude } = request.all()
 
     const properties = Property.query()
+      .with('images')
       .nearBy(latitude, longitude, 10)
       .fetch()
 
@@ -34,22 +33,31 @@ class PropertyController {
    * POST properties
    *
    * @param {object} ctx
+   * @param {Request} ctx.auth
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ auth, request }) {
+    const { id } = auth.user
+    const data = request.only([
+      'title',
+      'address',
+      'latitude',
+      'longitude',
+      'price'
+    ])
+  
+    const property = await Property.create({ ...data, user_id: id })
+  
+    return property
   }
 
   /**
    * Display a single property.
    * GET properties/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * 
+   * @param {object} params
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params }) {
     const property = await Property.findOrFail(params.id)
     await property.load('images')
     return property
@@ -59,22 +67,39 @@ class PropertyController {
    * Update property details.
    * PUT or PATCH properties/:id
    *
+   * @param {object} params
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const property = await Property.findOrFail(params.id)
+
+    const data = request.only([
+      'title',
+      'address',
+      'latitude',
+      'longitude',
+      'price'
+    ])
+
+    property.merge(data)
+
+    await property.save()
+
+    return property
   }
 
   /**
    * Delete a property with id.
    * DELETE properties/:id
    *
+   * @param {object} params
    * @param {object} ctx
-   * @param {Request} ctx.request
+   * @param {Request} ctx.auth
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, auth, response }) {
     const property = await Property.findOrFail(params.id)
     if (property.user_id !== auth.user.id) {
       return response.status(401).send({ error: 'Not authorized' })
