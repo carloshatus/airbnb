@@ -21,12 +21,11 @@ services:
       - 8000:${API_PORT}
     volumes:
       - ./${API_DIR}:/home/node/app
-      - ./${API_DIR}/node_modules:/home/node/app/node_modules
     networks:
       - modo_bridge
 
   database:
-    container_name: ${DATABASE_CONNECTION_NAME}
+    container_name: ${DATABASE_CONNECTION_NAME}-${API_NAME}
     restart: always
     build:
       context: ./${DATABASE_DIR}
